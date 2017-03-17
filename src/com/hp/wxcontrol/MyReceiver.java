@@ -159,6 +159,7 @@ public class MyReceiver extends BroadcastReceiver {
 				String imgurl = "";
 				String num = "";
 				String shareurl = "";
+				JSONArray imgUrlArray;
 
 				switch (action) {
 				case 100:
@@ -168,20 +169,21 @@ public class MyReceiver extends BroadcastReceiver {
 				case 1001:
 					break;
 				case 3001: // 朋友圈发图文
-					JSONArray imgUrlArray = jsonObject.getJSONArray("imgurl"); // 朋友圈发图文的图片URL数组
+					imgUrlArray = jsonObject.getJSONArray("imgurl"); // 朋友圈发图文的图片URL数组
 
-					File appDir = new File(
-							Environment.getExternalStorageDirectory(),
-							"wxControl");
-					
-					if (appDir.isDirectory() && appDir.list().length > 0) {
-
-						File[] files = appDir.listFiles();
-
-						for (File file : files) {		
-							file.delete();
-						}
-					}
+//					File appDir = new File(
+//							Environment.getExternalStorageDirectory(),
+//							"wxControl");
+//					
+//					if (appDir.isDirectory() && appDir.list().length > 0) {
+//
+//						File[] files = appDir.listFiles();
+//
+//						for (File file : files) {		
+//							file.delete();
+//						}
+//					}
+					PictureUtil.deleteFiles();
 					
 					for (int i = 0; i < imgUrlArray.length(); i++) {
 
@@ -191,9 +193,10 @@ public class MyReceiver extends BroadcastReceiver {
 								imgUrlJson.getString("url"))).start(); // 下载图片到本地
 					}
 					
-					PictureUtil pu = new PictureUtil(context);
-					pu.refresh();
-
+//					PictureUtil pu = new PictureUtil(context);
+//					pu.refresh();
+					PictureUtil.refresh(context);
+					
 					content = jsonObject.getString("content"); // 朋友圈发图文的文字内容
 					ActionQueue.queue.add(action + "," + content);
 					break;
@@ -262,6 +265,24 @@ public class MyReceiver extends BroadcastReceiver {
 					break;
 				case 6005: // 微信群-发红包
 					break;
+				case 6006: // 微信群-扫描加微信群			
+					imgUrlArray = jsonObject.getJSONArray("imgurl"); // 二维码图文的图片URL数组
+					
+					PictureUtil.deleteFiles();
+
+					for (int i = 0; i < imgUrlArray.length(); i++) {
+
+						JSONObject imgUrlJson = (JSONObject) imgUrlArray.get(i);
+
+						new Thread(new PictureThread(context,
+								imgUrlJson.getString("url"))).start(); // 下载图片到本地
+					}
+					
+					PictureUtil.refresh(context);
+					
+					ActionQueue.queue.add(action + "," + imgUrlArray.length());
+					
+					break;
 				case 7000: // 浏览新闻
 					num = jsonObject.getString("num");
 					ActionQueue.queue.add(action + "," + num);
@@ -269,6 +290,9 @@ public class MyReceiver extends BroadcastReceiver {
 				case 8000: // 设置GPS坐标
 					double latitude = jsonObject.getDouble("latitude"); // 经度
 					double longitude = jsonObject.getDouble("longitude");// 维度
+				case 8001: // 导入通讯录
+					String url = jsonObject.getString("url");
+					new Thread(new ContactThread(context, url)).start();
 				default:
 					break;
 				}

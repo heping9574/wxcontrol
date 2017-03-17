@@ -62,7 +62,7 @@ public class MainActivity extends Activity implements
 		cm.setText("");
 		
 		//调用JPush API设置Tag
-		mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, "13146451976"));
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, "13146451976"), 30000);
 		
 		String rid = JPushInterface.getRegistrationID(getApplicationContext());
 		

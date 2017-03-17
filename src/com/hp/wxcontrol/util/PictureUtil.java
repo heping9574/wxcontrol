@@ -21,7 +21,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-public class PictureUtil {
+public class PictureUtil extends AbstUtil {
 	
 	private Context context;
 	private String url;
@@ -117,27 +117,27 @@ public class PictureUtil {
 
 	    try {
 	    
-		// 下载图片
-		URL webUrl = new URL(url);
-		HttpURLConnection conn = (HttpURLConnection) webUrl.openConnection();
-		conn.setConnectTimeout(5000);
-		conn.setRequestMethod("GET");
-		conn.setDoInput(true);
-		
-		if (conn.getResponseCode() == 200) {
-
-			InputStream is = conn.getInputStream();
+			// 下载图片
+			URL webUrl = new URL(url);
+			HttpURLConnection conn = (HttpURLConnection) webUrl.openConnection();
+			conn.setConnectTimeout(5000);
+			conn.setRequestMethod("GET");
+			conn.setDoInput(true);
 			
-			FileOutputStream fos = new FileOutputStream(file);
-			
-			byte[] buffer = new byte[1024];
-			int len = 0;
-			while((len = is.read(buffer)) != -1) {
-				fos.write(buffer, 0, len);
+			if (conn.getResponseCode() == 200) {
+	
+				InputStream is = conn.getInputStream();
+				
+				FileOutputStream fos = new FileOutputStream(file);
+				
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while((len = is.read(buffer)) != -1) {
+					fos.write(buffer, 0, len);
+				}
+				is.close();
+				fos.close();
 			}
-			is.close();
-			fos.close();
-		}
 		
 	    } catch (Exception ex) {
 	    	Log.d(TAG, "[PicutureUtil] err: " + ex.toString());
@@ -176,15 +176,25 @@ public class PictureUtil {
 	    Log.d(TAG, "[PicutureUtil] save picture filename: " + fileName + ";path:" + Uri.fromFile(new File(file.getPath())));
 	}
 	
-	public void refresh() {
+	public static void refresh(Context context) {
 		context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
 	}
 	
-	private static String getImgName(String url) {
-		if (url != null && url.length() > 0) {
-			return url.substring(url.lastIndexOf("/")+1);
-		} else {
-			return "noname.jpg";
+	/**
+	 * 删除wxControl文件夹下的文件
+	 */
+	public static void deleteFiles() {
+		File appDir = new File(
+				Environment.getExternalStorageDirectory(),
+				"wxControl");
+		
+		if (appDir.isDirectory() && appDir.list().length > 0) {
+
+			File[] files = appDir.listFiles();
+
+			for (File file : files) {		
+				file.delete();
+			}
 		}
 	}
 }
