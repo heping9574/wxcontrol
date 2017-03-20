@@ -195,7 +195,7 @@ public class MyReceiver extends BroadcastReceiver {
 					
 //					PictureUtil pu = new PictureUtil(context);
 //					pu.refresh();
-					PictureUtil.refresh(context);
+					//PictureUtil.refresh(context);
 					
 					content = jsonObject.getString("content"); // 朋友圈发图文的文字内容
 					ActionQueue.queue.add(action + "," + content);

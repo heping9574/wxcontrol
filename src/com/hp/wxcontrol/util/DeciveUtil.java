@@ -1,8 +1,11 @@
 package com.hp.wxcontrol.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 
 public class DeciveUtil {
 
@@ -11,7 +14,7 @@ public class DeciveUtil {
 	 * 
 	 * @return
 	 */
-	private static String getlocalip(Context context) {
+	public static String getlocalip(Context context) {
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		int ipAddress = wifiInfo.getIpAddress();
@@ -20,5 +23,30 @@ public class DeciveUtil {
 			return null;
 		return ((ipAddress & 0xff) + "." + (ipAddress >> 8 & 0xff) + "."
 				+ (ipAddress >> 16 & 0xff) + "." + (ipAddress >> 24 & 0xff));
+	}
+	
+	/**
+	 * 获取IMEI
+	 * @param context
+	 * @return
+	 */
+	public static String getImei(Context context) {
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);        
+        String imei = tm.getSimSerialNumber();
+        if(imei==null)
+        {
+            // android pad
+            imei = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);       
+        }
+        return imei;
+	}
+	
+	public static String getDeviceId(Context context) {		
+		TelephonyManager tm = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);        
+        String deviceId = tm.getDeviceId();
+        if (deviceId == null || "".equals(deviceId)) {
+        	deviceId = "0000000000";
+        }
+        return deviceId;
 	}
 }

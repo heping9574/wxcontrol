@@ -6,6 +6,8 @@ import java.util.Set;
 
 import com.hp.wxcontrol.ExampleUtil;
 import com.hp.wxcontrol.util.ActionQueue;
+import com.hp.wxcontrol.util.Constants;
+import com.hp.wxcontrol.util.DeciveUtil;
 import com.hp.wxcontrol.util.HttpUtil;
 import com.hp.wxcontrol.util.MD5Util;
 import com.hp.wxcontrol.util.PictureUtil;
@@ -61,12 +63,15 @@ public class MainActivity extends Activity implements
 		ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 		cm.setText("");
 		
-		//调用JPush API设置Tag
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, "13146451976"), 30000);
-		
 		String rid = JPushInterface.getRegistrationID(getApplicationContext());
+
+		String imei = DeciveUtil.getImei(getApplicationContext());
+		String deciveId = DeciveUtil.getDeviceId(getApplicationContext());
 		
-		Log.d(TAG, "RegistrationID:" + rid);
+		//调用JPush API设置Tag
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, deciveId), 30000);
+		
+		Log.d(TAG, "RegistrationID:" + rid + "; imei:" + imei + "; deciveid:" + deciveId);
 	}
 
 	@Override
@@ -142,16 +147,19 @@ public class MainActivity extends Activity implements
 					logs = "Set tag and alias success";
 					
 					String reg_id = JPushInterface.getRegistrationID(getApplicationContext());
-					String sign = MD5Util.getMd5Value(reg_id + "123456");
+					String name = DeciveUtil.getDeviceId(getApplicationContext());
+					String imei = DeciveUtil.getImei(getApplicationContext());
+					String sign = MD5Util.getMd5Value(reg_id + name + imei + "123456");
 					HashMap<String, String> params = new HashMap<String, String>();
 					params.put("sign", sign);
-					params.put("name", "13146451976");
+					params.put("name", name);
 					params.put("reg_id", reg_id);
+					params.put("imei", imei);
 					
-					Log.i(TAG, "httpUtil.doPostAsyn -- sign=" + sign + ";reg_id=" + reg_id);
+					Log.i(TAG, "httpUtil.doPostAsyn -- sign=" + sign + ";reg_id=" + reg_id + "; imei:" + imei + "; name:" + name);
 					
 					HttpUtil httpUtil = new HttpUtil();
-					httpUtil.doPostAsyn("http://106.75.10.209/api/device/register", params, new HttpUtil.HttpCallBackListener() {
+					httpUtil.doPostAsyn(Constants.REG_URL, params, new HttpUtil.HttpCallBackListener() {
 						@Override
 						public void onFinish(String result) {
 							Log.i(TAG, "httpUtil.doPostAsyn:" + result);
@@ -216,5 +224,4 @@ public class MainActivity extends Activity implements
 		}
 
 	};
-
 }

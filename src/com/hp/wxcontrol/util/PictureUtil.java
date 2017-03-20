@@ -171,13 +171,17 @@ public class PictureUtil extends AbstUtil {
 	    // 最后通知图库更新
 	    //String path = Environment.getExternalStorageDirectory().getPath();
 	    //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
-	    //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File(file.getPath()))));
+	    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File(file.getPath()))));
+	    //context.sendBroadcast(new Intent("android.intent.action.MEDIA_SCANNER_SCAN_DIR",Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
 	    
 	    Log.d(TAG, "[PicutureUtil] save picture filename: " + fileName + ";path:" + Uri.fromFile(new File(file.getPath())));
 	}
 	
 	public static void refresh(Context context) {
-		context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
+		//context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
+		//context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,	Uri.fromFile(new File("file://sdcard/wxControl"))));
+		context.sendBroadcast(new Intent("android.intent.action.MEDIA_SCANNER_SCAN_DIR",Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
+		Log.d(TAG, "refresh file complete !");
 	}
 	
 	/**
