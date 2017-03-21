@@ -3,6 +3,10 @@ package com.hp.wxcontrol.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.util.Log;
+
+import static com.hp.wxcontrol.util.Constants.TAG;
+
 public class MD5Util {
 
 	/**
@@ -11,7 +15,7 @@ public class MD5Util {
 	 * @param sSecret
 	 * @return
 	 */
-	public static String getMd5Value(String sSecret) {
+	private static String getMd5Value(String sSecret) {
 		try {
 			MessageDigest bmd5 = MessageDigest.getInstance("MD5");
 			bmd5.update(sSecret.getBytes());
@@ -31,5 +35,23 @@ public class MD5Util {
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	/**
+	 * 获取设备注册Sign值
+	 * @param regId
+	 * @param name
+	 * @param imei
+	 * @return
+	 */
+	public static String getDeviceRegSignValue(String regId, String name, String imei) {
+		Log.d(TAG, "getDeviceRegSignValue|" + "regId=" + regId + "|name=" + name + "|imei=" + imei);
+		String sign = getMd5Value(
+				(getMd5Value(regId + Constants.KEY).substring(0, 10)) + 
+				name + 
+				imei
+			);
+		Log.d(TAG, "getDeviceRegSignValue|" + "sign=" + sign);
+		return sign;
 	}
 }

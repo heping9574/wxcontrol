@@ -26,21 +26,10 @@ public class DeciveUtil {
 	}
 	
 	/**
-	 * 获取IMEI
+	 * 获取设备ID
 	 * @param context
 	 * @return
 	 */
-	public static String getImei(Context context) {
-		TelephonyManager tm = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);        
-        String imei = tm.getSimSerialNumber();
-        if(imei==null)
-        {
-            // android pad
-            imei = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);       
-        }
-        return imei;
-	}
-	
 	public static String getDeviceId(Context context) {		
 		TelephonyManager tm = (TelephonyManager) context.getSystemService(Activity.TELEPHONY_SERVICE);        
         String deviceId = tm.getDeviceId();

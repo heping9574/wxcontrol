@@ -65,13 +65,12 @@ public class MainActivity extends Activity implements
 		
 		String rid = JPushInterface.getRegistrationID(getApplicationContext());
 
-		String imei = DeciveUtil.getImei(getApplicationContext());
 		String deciveId = DeciveUtil.getDeviceId(getApplicationContext());
 		
 		//调用JPush API设置Tag
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, deciveId), 30000);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, deciveId), 20000);
 		
-		Log.d(TAG, "RegistrationID:" + rid + "; imei:" + imei + "; deciveid:" + deciveId);
+		Log.d(TAG, "RegistrationID:" + rid + "; deciveid:" + deciveId);
 	}
 
 	@Override
@@ -148,8 +147,8 @@ public class MainActivity extends Activity implements
 					
 					String reg_id = JPushInterface.getRegistrationID(getApplicationContext());
 					String name = DeciveUtil.getDeviceId(getApplicationContext());
-					String imei = DeciveUtil.getImei(getApplicationContext());
-					String sign = MD5Util.getMd5Value(reg_id + name + imei + "123456");
+					String imei = DeciveUtil.getDeviceId(getApplicationContext());
+					String sign = MD5Util.getDeviceRegSignValue(reg_id, name, imei);
 					HashMap<String, String> params = new HashMap<String, String>();
 					params.put("sign", sign);
 					params.put("name", name);
