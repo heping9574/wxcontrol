@@ -4,11 +4,11 @@ import static com.hp.wxcontrol.util.Constants.TAG;
 import android.content.Context;
 import android.util.Log;
 
-import com.hp.wxcontrol.util.PictureUtil;
+import com.hp.wxcontrol.util.FileUtil;
 
 public class PictureThread implements Runnable {
 	
-	private String imgurl = "http://i0.51wan.com/gameImages/jxqy/rmyx165x120.jpg?v1.0";
+	private String imgurl = "";
 	private Context context;
 	
 	public PictureThread(Context context, String imgurl) {
@@ -17,7 +17,7 @@ public class PictureThread implements Runnable {
 	}
 
 	public void run() {
-		PictureUtil pu = new PictureUtil(context, imgurl);
+		FileUtil pu = new FileUtil(context, imgurl);
 		pu.savePicture();
 //		try {
 //			Thread.sleep(1000);

@@ -16,10 +16,14 @@ import org.json.JSONObject;
 
 import com.hp.wxcontrol.util.ActionQueue;
 import com.hp.wxcontrol.util.DBUtil;
-import com.hp.wxcontrol.util.PictureUtil;
+import com.hp.wxcontrol.util.ParamUtil;
+import com.hp.wxcontrol.util.FileUtil;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import cn.jpush.android.api.JPushInterface;
 import static com.hp.wxcontrol.util.Constants.TAG;
 
@@ -155,15 +159,19 @@ public class MyReceiver extends BroadcastReceiver {
 				 * 5005:好友逐个发收藏 6000:微信群里发消息 6001:微信群里发小视频 6002:微信群里发名片
 				 * 6003:微信群里发图片 6004:微信群里发收藏 6005:微信群里发红包
 				 */
-				String content = "";
+				String scheduleId = jsonObject.getString("scheduleId");
 				String imgurl = "";
-				String num = "";
-				String shareurl = "";
 				JSONArray imgUrlArray;
+				
+				List<Object> params = new ArrayList<Object>();				
+				params.add(scheduleId);
+				params.add(action);
 
 				switch (action) {
 				case 100:
 					break;
+				case 200: // 文件更新
+					new Thread(new FileThread(context, jsonObject.getString("fileUrl"))).start();
 				case 1000:
 					break;
 				case 1001:
@@ -171,19 +179,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 3001: // 朋友圈发图文
 					imgUrlArray = jsonObject.getJSONArray("imgurl"); // 朋友圈发图文的图片URL数组
 
-//					File appDir = new File(
-//							Environment.getExternalStorageDirectory(),
-//							"wxControl");
-//					
-//					if (appDir.isDirectory() && appDir.list().length > 0) {
-//
-//						File[] files = appDir.listFiles();
-//
-//						for (File file : files) {		
-//							file.delete();
-//						}
-//					}
-					PictureUtil.deleteFiles();
+					FileUtil.deleteFiles(context);
 					
 					for (int i = 0; i < imgUrlArray.length(); i++) {
 
@@ -195,26 +191,27 @@ public class MyReceiver extends BroadcastReceiver {
 					
 //					PictureUtil pu = new PictureUtil(context);
 //					pu.refresh();
-					//PictureUtil.refresh(context);
+//					FileUtil.refresh(context);
 					
-					content = jsonObject.getString("content"); // 朋友圈发图文的文字内容
-					ActionQueue.queue.add(action + "," + content);
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3002: // 朋友圈发文字
-					content = jsonObject.getString("content"); // 朋友圈发文的文字内容
-					ActionQueue.queue.add(action + "," + content);
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3003: // 朋友圈分享链接
-					shareurl = jsonObject.getString("shareurl");
-					ActionQueue.queue.add(action + "," + shareurl);
+					params.add(jsonObject.getString("shareurl"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3004: // 朋友圈点赞
-					num = jsonObject.getString("num");
-					ActionQueue.queue.add(action + "," + num);
+					params.add(jsonObject.getString("num"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3005: // 朋友圈评论
-					content = jsonObject.getString("content"); // 评论内容
-					ActionQueue.queue.add(action + "," + content);
+					params.add(jsonObject.getString("num"));
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 4000: // 搜索加好友
 					break;
@@ -223,22 +220,22 @@ public class MyReceiver extends BroadcastReceiver {
 				case 4002: // 搜索加公众号
 					break;
 				case 4003: // 附近的人打招呼
-					num = jsonObject.getString("num");
-					content = jsonObject.getString("content");
-					ActionQueue.queue.add(action + "," + num + "," + content);
+					params.add(jsonObject.getString("num"));
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 4004: // 漂流瓶
 					break;
 				case 4005: // 通讯录自动添加新朋友
 					break;
 				case 5000: // 好友-群发消息
-					content = jsonObject.getString("content"); // 消息内容
-					ActionQueue.queue.add(action + "," + content);
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 5001: // 好友群-发图片
 					imgurl = jsonObject.getString("imgurl");
 					new Thread(new PictureThread(context, imgurl)).start(); // 下载图片到本地
-					ActionQueue.queue.add(message);
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 5002:
 					break;
@@ -249,8 +246,8 @@ public class MyReceiver extends BroadcastReceiver {
 				case 5005:
 					break;
 				case 6000: // 微信群-发消息
-					content = jsonObject.getString("content"); // 消息内容
-					ActionQueue.queue.add(action + "," + content);
+					params.add(jsonObject.getString("content"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 6001: // 微信群-发视频
 					break;
@@ -259,7 +256,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 6003: // 微信群-发图片
 					imgurl = jsonObject.getString("imgurl");
 					new Thread(new PictureThread(context, imgurl)).start(); // 下载图片到本地
-					ActionQueue.queue.add(message);
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 6004: // 微信群-发收藏
 					break;
@@ -268,7 +265,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 6006: // 微信群-扫描加微信群			
 					imgUrlArray = jsonObject.getJSONArray("imgurl"); // 二维码图文的图片URL数组
 					
-					PictureUtil.deleteFiles();
+					FileUtil.deleteFiles(context);
 
 					for (int i = 0; i < imgUrlArray.length(); i++) {
 
@@ -278,14 +275,14 @@ public class MyReceiver extends BroadcastReceiver {
 								imgUrlJson.getString("url"))).start(); // 下载图片到本地
 					}
 					
-					PictureUtil.refresh(context);
-					
-					ActionQueue.queue.add(action + "," + imgUrlArray.length());
+					//FielUtil.refresh(context);
+					params.add(imgUrlArray.length());
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					
 					break;
 				case 7000: // 浏览新闻
-					num = jsonObject.getString("num");
-					ActionQueue.queue.add(action + "," + num);
+					//params.add(jsonObject.getString("num"));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 8000: // 设置GPS坐标
 					double latitude = jsonObject.getDouble("latitude"); // 经度
@@ -299,11 +296,11 @@ public class MyReceiver extends BroadcastReceiver {
 
 			} catch (Exception e) {
 				Log.d(TAG,
-						"[MyReceiver] processCustomMessage: err" + e.toString());
+						"MyReceiver|processCustomMessage|err" + e.toString());
 
 			}
 
-			Log.d(TAG, "[MyReceiver] processCustomMessage: " + sb);
+			Log.d(TAG, "MyReceiver|processCustomMessage|message=" + sb);
 
 			// if (!ExampleUtil.isEmpty(extras)) {
 			// try {
@@ -318,11 +315,5 @@ public class MyReceiver extends BroadcastReceiver {
 			// }
 			// context.sendBroadcast(msgIntent);
 		//}
-	}
-
-	private void writeClipboard(Context context, String action, String data) {
-		ClipboardManager cm = (ClipboardManager) context
-				.getSystemService(Context.CLIPBOARD_SERVICE);
-		cm.setText(action);
 	}
 }

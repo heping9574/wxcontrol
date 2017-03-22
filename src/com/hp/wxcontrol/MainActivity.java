@@ -10,7 +10,7 @@ import com.hp.wxcontrol.util.Constants;
 import com.hp.wxcontrol.util.DeciveUtil;
 import com.hp.wxcontrol.util.HttpUtil;
 import com.hp.wxcontrol.util.MD5Util;
-import com.hp.wxcontrol.util.PictureUtil;
+import com.hp.wxcontrol.util.FileUtil;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
@@ -90,6 +90,7 @@ public class MainActivity extends Activity implements
 			action = "3006";
 		} else if (R.id.radioButton6 == checkedId) {
 			action = "";
+			ActionQueue.queue.clear();
 //			String ACTION_MEDIA_SCANNER_SCAN_DIR = "android.intent.action.MEDIA_SCANNER_SCAN_DIR";
 //			getApplicationContext().sendBroadcast(new Intent(ACTION_MEDIA_SCANNER_SCAN_DIR,	Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
 		}
