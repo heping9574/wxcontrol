@@ -227,6 +227,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 4004: // 漂流瓶
 					break;
 				case 4005: // 通讯录自动添加新朋友
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 5000: // 好友-群发消息
 					params.add(jsonObject.getString("content"));
@@ -246,6 +247,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 5005:
 					break;
 				case 6000: // 微信群-发消息
+					params.add(jsonObject.getString("num"));
 					params.add(jsonObject.getString("content"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
@@ -290,6 +292,8 @@ public class MyReceiver extends BroadcastReceiver {
 				case 8001: // 导入通讯录
 					String url = jsonObject.getString("url");
 					new Thread(new ContactThread(context, url)).start();
+				case 9999: // 退出脚本
+					ActionQueue.queue.add(ParamUtil.getParamString(params));
 				default:
 					break;
 				}

@@ -1,36 +1,27 @@
 package com.hp.wxcontrol;
 
-import java.io.File;
+import static com.hp.wxcontrol.util.Constants.TAG;
+
 import java.util.HashMap;
 import java.util.Set;
 
-import com.hp.wxcontrol.ExampleUtil;
-import com.hp.wxcontrol.util.ActionQueue;
-import com.hp.wxcontrol.util.Constants;
-import com.hp.wxcontrol.util.DeciveUtil;
-import com.hp.wxcontrol.util.HttpUtil;
-import com.hp.wxcontrol.util.MD5Util;
-import com.hp.wxcontrol.util.FileUtil;
-
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
-import static com.hp.wxcontrol.util.Constants.TAG;
+import com.hp.wxcontrol.util.ActionQueue;
+import com.hp.wxcontrol.util.Constants;
+import com.hp.wxcontrol.util.DeciveUtil;
+import com.hp.wxcontrol.util.HttpUtil;
+import com.hp.wxcontrol.util.MD5Util;
 
 public class MainActivity extends Activity implements 
 		RadioGroup.OnCheckedChangeListener {
@@ -93,8 +84,10 @@ public class MainActivity extends Activity implements
 			ActionQueue.queue.clear();
 //			String ACTION_MEDIA_SCANNER_SCAN_DIR = "android.intent.action.MEDIA_SCANNER_SCAN_DIR";
 //			getApplicationContext().sendBroadcast(new Intent(ACTION_MEDIA_SCANNER_SCAN_DIR,	Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "wxControl"))));
+		} else if (R.id.radioButton7 == checkedId) {
+			
 		}
-//
+
 		ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
 		Toast.makeText(getApplicationContext(), String.valueOf(cm.getText()) + "--" + ActionQueue.queue.size(),
