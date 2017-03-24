@@ -227,13 +227,14 @@ public class MyReceiver extends BroadcastReceiver {
 				case 4004: // 漂流瓶
 					break;
 				case 4005: // 通讯录自动添加新朋友
+					params.add(jsonObject.getString("num"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 5000: // 好友-群发消息
 					params.add(jsonObject.getString("content"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
-				case 5001: // 好友群-发图片
+				case 5001: // 好友-群发图片
 					imgurl = jsonObject.getString("imgurl");
 					new Thread(new PictureThread(context, imgurl)).start(); // 下载图片到本地
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
@@ -258,6 +259,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 6003: // 微信群-发图片
 					imgurl = jsonObject.getString("imgurl");
 					new Thread(new PictureThread(context, imgurl)).start(); // 下载图片到本地
+					params.add(jsonObject.getString("num"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 6004: // 微信群-发收藏
@@ -279,7 +281,9 @@ public class MyReceiver extends BroadcastReceiver {
 					
 					//FielUtil.refresh(context);
 					params.add(imgUrlArray.length());
-					ActionQueue.queue.add(ParamUtil.getParamString(params));
+					ActionQueue.queue.add(ParamUtil.getParamString(params));					
+					break;
+				case 6007: // 扫码加微信好友
 					
 					break;
 				case 7000: // 浏览新闻
