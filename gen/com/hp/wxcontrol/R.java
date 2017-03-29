@@ -18,23 +18,15 @@ public final class R {
         public static final int jpush_richpush_progressbar=0x7f020004;
     }
     public static final class id {
-        public static final int actionbarLayoutId=0x7f06000a;
-        public static final int fullWebView=0x7f060010;
-        public static final int imgRichpushBtnBack=0x7f06000c;
-        public static final int imgView=0x7f06000d;
-        public static final int popLayoutId=0x7f060008;
-        public static final int pushPrograssBar=0x7f06000f;
-        public static final int radioButton=0x7f060001;
-        public static final int radioButton2=0x7f060002;
-        public static final int radioButton3=0x7f060003;
-        public static final int radioButton4=0x7f060004;
-        public static final int radioButton5=0x7f060005;
-        public static final int radioButton6=0x7f060006;
-        public static final int radioButton7=0x7f060007;
-        public static final int rg=0x7f060000;
-        public static final int rlRichpushTitleBar=0x7f06000b;
-        public static final int tvRichpushTitle=0x7f06000e;
-        public static final int wvPopwin=0x7f060009;
+        public static final int actionbarLayoutId=0x7f060002;
+        public static final int fullWebView=0x7f060008;
+        public static final int imgRichpushBtnBack=0x7f060004;
+        public static final int imgView=0x7f060005;
+        public static final int popLayoutId=0x7f060000;
+        public static final int pushPrograssBar=0x7f060007;
+        public static final int rlRichpushTitleBar=0x7f060003;
+        public static final int tvRichpushTitle=0x7f060006;
+        public static final int wvPopwin=0x7f060001;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

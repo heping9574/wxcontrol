@@ -257,9 +257,20 @@ public class MyReceiver extends BroadcastReceiver {
 				case 6002: // 微信群-发名片
 					break;
 				case 6003: // 微信群-发图片
-					imgurl = jsonObject.getString("imgurl");
-					new Thread(new PictureThread(context, imgurl)).start(); // 下载图片到本地
-					params.add(jsonObject.getString("num"));
+	
+					imgUrlArray = jsonObject.getJSONArray("imgurl"); // 朋友圈发图文的图片URL数组
+
+					FileUtil.deleteFiles(context);
+					
+					for (int i = 0; i < imgUrlArray.length(); i++) {
+
+						JSONObject imgUrlJson = (JSONObject) imgUrlArray.get(i);
+
+						new Thread(new PictureThread(context,
+								imgUrlJson.getString("url"))).start(); // 下载图片到本地
+					}
+					
+					params.add(imgUrlArray.length());
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 6004: // 微信群-发收藏

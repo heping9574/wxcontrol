@@ -23,10 +23,9 @@ import com.hp.wxcontrol.util.DeciveUtil;
 import com.hp.wxcontrol.util.HttpUtil;
 import com.hp.wxcontrol.util.MD5Util;
 
-public class MainActivity extends Activity implements 
-		RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends Activity {
 
-	private RadioGroup rg;
+	//private RadioGroup rg;
 
 	public static boolean isForeground = false;
 
@@ -35,9 +34,9 @@ public class MainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		rg = (RadioGroup) findViewById(R.id.rg);
+		//rg = (RadioGroup) findViewById(R.id.rg);
 
-		rg.setOnCheckedChangeListener(this);
+		//rg.setOnCheckedChangeListener(this);
 
 		JPushInterface.setDebugMode(true); // 设置开启日志,发布时请关闭日志
 		JPushInterface.init(this); // 初始化 JPush
@@ -63,7 +62,7 @@ public class MainActivity extends Activity implements
 		
 		Log.d(TAG, "RegistrationID:" + rid + "; deciveid:" + deciveId);
 	}
-
+/**
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -93,7 +92,7 @@ public class MainActivity extends Activity implements
 		Toast.makeText(getApplicationContext(), String.valueOf(cm.getText()) + "--" + ActionQueue.queue.size(),
 				Toast.LENGTH_SHORT).show();
 	}
-
+*/
 	@Override
 	protected void onResume() {
 		isForeground = true;
