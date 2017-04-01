@@ -9,6 +9,7 @@ import android.provider.MediaStore.Files;
 import android.content.ClipboardManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,12 +167,15 @@ public class MyReceiver extends BroadcastReceiver {
 				List<Object> params = new ArrayList<Object>();				
 				params.add(scheduleId);
 				params.add(action);
+				
+				Toast.makeText(context, "收到任务ID:" + scheduleId, Toast.LENGTH_SHORT).show();
 
 				switch (action) {
 				case 100:
 					break;
 				case 200: // 文件更新
 					new Thread(new FileThread(context, jsonObject.getString("fileUrl"))).start();
+					break;
 				case 1000:
 					break;
 				case 1001:
@@ -304,9 +308,11 @@ public class MyReceiver extends BroadcastReceiver {
 				case 8000: // 设置GPS坐标
 					double latitude = jsonObject.getDouble("latitude"); // 经度
 					double longitude = jsonObject.getDouble("longitude");// 维度
+					break;
 				case 8001: // 导入通讯录
 					String url = jsonObject.getString("url");
 					new Thread(new ContactThread(context, url)).start();
+					break;
 				case 9999: // 退出脚本
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 				default:
