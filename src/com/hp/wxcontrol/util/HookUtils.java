@@ -28,8 +28,17 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
 public class HookUtils {
+	
+	/**
+	 * 
+	 * @param classLoader
+	 * @param latitude 纬度
+	 * @param longitude 经度
+	 * @param lac
+	 * @param cid
+	 */
 	public static void HookAndChange(ClassLoader classLoader,
-			final double latitude, final double longtitude, final int lac,
+			final double latitude, final double longitude, final int lac,
 			final int cid) {
 
 		XposedHelpers.findAndHookMethod("android.telephony.TelephonyManager",
@@ -205,7 +214,7 @@ public class HookUtils {
 							throws Throwable {
 						Location l = new Location(LocationManager.GPS_PROVIDER);
 						l.setLatitude(latitude);
-						l.setLongitude(longtitude);
+						l.setLongitude(longitude);
 						l.setAccuracy(100f);
 						l.setTime(System.currentTimeMillis());
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -223,7 +232,7 @@ public class HookUtils {
 							throws Throwable {
 						Location l = new Location(LocationManager.GPS_PROVIDER);
 						l.setLatitude(latitude);
-						l.setLongitude(longtitude);
+						l.setLongitude(longitude);
 						l.setAccuracy(100f);
 						l.setTime(System.currentTimeMillis());
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -361,7 +370,7 @@ public class HookUtils {
 							Location l = new Location(
 									LocationManager.GPS_PROVIDER);
 							l.setLatitude(latitude);
-							l.setLongitude(longtitude);
+							l.setLongitude(longitude);
 							l.setAccuracy(10.00f);
 							l.setTime(System.currentTimeMillis());
 							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -411,7 +420,7 @@ public class HookUtils {
 									Location l = new Location(
 											LocationManager.GPS_PROVIDER);
 									l.setLatitude(latitude);
-									l.setLongitude(longtitude);
+									l.setLongitude(longitude);
 									l.setAccuracy(100f);
 									l.setTime(System.currentTimeMillis());
 									if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

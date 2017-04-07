@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.hp.wxcontrol.model.XposedModule;
 import com.hp.wxcontrol.util.ActionQueue;
 import com.hp.wxcontrol.util.DBUtil;
 import com.hp.wxcontrol.util.ParamUtil;
@@ -163,6 +164,7 @@ public class MyReceiver extends BroadcastReceiver {
 				String scheduleId = jsonObject.getString("scheduleId");
 				String imgurl = "";
 				JSONArray imgUrlArray;
+				String num = "";
 				
 				List<Object> params = new ArrayList<Object>();				
 				params.add(scheduleId);
@@ -209,11 +211,19 @@ public class MyReceiver extends BroadcastReceiver {
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3004: // 朋友圈点赞
-					params.add(jsonObject.getString("num"));
+					num = jsonObject.getString("num");
+					if ("".equals(num) || null == num) {
+						num = "3";
+					}
+					params.add(num);
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 3005: // 朋友圈评论
-					params.add(jsonObject.getString("num"));
+					num = jsonObject.getString("num");
+					if ("".equals(num) || null == num) {
+						num = "3";
+					}
+					params.add(num);					
 					params.add(jsonObject.getString("content"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
@@ -224,14 +234,22 @@ public class MyReceiver extends BroadcastReceiver {
 				case 4002: // 搜索加公众号
 					break;
 				case 4003: // 附近的人打招呼
-					params.add(jsonObject.getString("num"));
+					num = jsonObject.getString("num");
+					if ("".equals(num) || null == num) {
+						num = "3";
+					}
+					params.add(num);
 					params.add(jsonObject.getString("content"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 4004: // 漂流瓶
 					break;
 				case 4005: // 通讯录自动添加新朋友
-					params.add(jsonObject.getString("num"));
+					num = jsonObject.getString("num");
+					if ("".equals(num) || null == num) {
+						num = "3";
+					}
+					params.add(num);					
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
 				case 5000: // 好友-群发消息
@@ -252,7 +270,11 @@ public class MyReceiver extends BroadcastReceiver {
 				case 5005:
 					break;
 				case 6000: // 微信群-发消息
-					params.add(jsonObject.getString("num"));
+					num = jsonObject.getString("num");
+					if ("".equals(num) || null == num) {
+						num = "3";
+					}
+					params.add(num);					
 					params.add(jsonObject.getString("content"));
 					ActionQueue.queue.add(ParamUtil.getParamString(params));
 					break;
@@ -308,6 +330,7 @@ public class MyReceiver extends BroadcastReceiver {
 				case 8000: // 设置GPS坐标
 					double latitude = jsonObject.getDouble("latitude"); // 经度
 					double longitude = jsonObject.getDouble("longitude");// 维度
+					XposedModule module = new XposedModule(latitude, longitude);
 					break;
 				case 8001: // 导入通讯录
 					String url = jsonObject.getString("url");

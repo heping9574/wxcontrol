@@ -37,6 +37,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     
+    <uses-permission android:name="android.intent.action.BOOT_COMPLETED" />  
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />  
     
     <application
         android:allowBackup="true"
@@ -155,10 +157,33 @@
                 <category android:name="com.hp.wxcontrol" />
             </intent-filter>
         </receiver>
+                
+		<receiver android:enabled="true" android:exported="true" 
+		    android:name="com.hp.wxcontrol.BootReceiver"  
+		    android:permission="android.permission.RECEIVE_BOOT_COMPLETED">  
+		     <intent-filter>  
+		       <action android:name="android.intent.action.BOOT_COMPLETED" />  
+		       <action android:name="android.intent.action.QUICKBOOT_POWERON" />  
+		     <category android:name="android.intent.category.DEFAULT" />  
+		   </intent-filter>  
+		 </receiver>  
 
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
         <meta-data android:name="JPUSH_APPKEY" android:value="2d808ee523b9ade5e418e0bb" /> <!--  </>值来自开发者平台取得的AppKey-->
+                <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+
+        <!-- 模块描述 -->
+        <meta-data
+            android:name="xposeddescription"
+            android:value="模拟自定义经纬度" />
+
+        <!-- 最低版本号 -->
+        <meta-data
+            android:name="xposedminversion"
+            android:value="30" />
     </application>
 
 </manifest>
